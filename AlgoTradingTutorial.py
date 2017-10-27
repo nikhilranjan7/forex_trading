@@ -12,13 +12,15 @@ patternAr = []
 performanceAr = []
 
 def percentChange(startPoint, currentPoint):
-    return ((currentPoint-startPoint)/startPoint)*100
+    return ((currentPoint-startPoint)/abs(startPoint))*100
 
-def patternFinder():
+def patternStorage():
+    patStartTime = time.time()
     avgLine = ((bid + ask)/2)
     x = len(avgLine) - 30 # Last 30 datapoints remaining to be compared
     y = 11
     while y < x:
+        pattern = []
         p1 = percentChange(avgLine[y-10], avgLine[y-9])
         p2 = percentChange(avgLine[y-10], avgLine[y-8])
         p3 = percentChange(avgLine[y-10], avgLine[y-7])
@@ -30,15 +32,34 @@ def patternFinder():
         p9 = percentChange(avgLine[y-10], avgLine[y-1])
         p10 = percentChange(avgLine[y-10], avgLine[y-0])
 
-        outcomeRange = avgLine[y+20:y+30]
+        outcomeRange = avgLine[y+20:y+30] # telling what will be outcomerange after 20 to 30 points of current patter
         currentPoint = avgLine[y]
+        try:
+            avgOutcome = reduce(lambda x, y: x+y, outcomeRange) / len(outcomeRange)
+        except Exception, e:
+            print str(e)
+            avgOutcome = 0
 
-        print reduce(lambda x, y: x+y, outcomeRange) / len(outcomeRange)
-        print currentPoint
-        print '_____'
-        print p1, p2, p3, p4, p5, p6, p7, p8, p9, p10
+        futureOutcome = percentChange(currentPoint, avgOutcome)
+        pattern.append(p1)
+        pattern.append(p2)
+        pattern.append(p3)
+        pattern.append(p4)
+        pattern.append(p5)
+        pattern.append(p6)
+        pattern.append(p7)
+        pattern.append(p8)
+        pattern.append(p9)
+        pattern.append(p10)
+
+        patternAr.append(pattern)
+        performanceAr.append(futureOutcome)
+
         y += 1
-        time.sleep(5555)
+    patEndTime = time.time()
+    print(len(patternAr))
+    print(len(performanceAr))
+    print('Pattern storage took:', patEndTime - patStartTime, 'seconds')
 
 def graphRawFX():
 
@@ -61,4 +82,4 @@ def graphRawFX():
     plt.grid(True)
     plt.show()
 
-patternFinder()
+patternStorage()

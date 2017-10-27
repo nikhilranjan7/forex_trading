@@ -13,7 +13,10 @@ def graphRawFX():
     ax1.plot(date, ask)
 
     ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
-
+    for label in ax1.xaxis.get_ticklabels():
+        label.set_rotation(45)
+    plt.gca().get_yaxis().get_major_formatter().set_useOffset(False)
+    
     plt.grid(True)
     plt.show()
 

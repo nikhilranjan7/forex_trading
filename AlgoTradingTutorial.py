@@ -8,6 +8,8 @@ import time
 
 date, bid, ask = np.loadtxt('GBPUSD1d.txt', unpack = True, delimiter=',', converters={0:mdates.strpdate2num('%Y%m%d%H%M%S')})
 
+avgLine = ((bid + ask)/2)
+
 patternAr = []
 performanceAr = []
 
@@ -16,7 +18,6 @@ def percentChange(startPoint, currentPoint):
 
 def patternStorage():
     patStartTime = time.time()
-    avgLine = ((bid + ask)/2)
     x = len(avgLine) - 30 # Last 30 datapoints remaining to be compared
     y = 11
     while y < x:
@@ -82,4 +83,32 @@ def graphRawFX():
     plt.grid(True)
     plt.show()
 
-patternStorage()
+def patternRecognition():
+    patForRec = []
+    # -11 because we want to know the pattern of last 10 points
+    cp1 = percentChange(avgLine[-11], avgLine[-10])
+    cp2 = percentChange(avgLine[-11], avgLine[-9])
+    cp3 = percentChange(avgLine[-11], avgLine[-8])
+    cp4 = percentChange(avgLine[-11], avgLine[-7])
+    cp5 = percentChange(avgLine[-11], avgLine[-6])
+    cp6 = percentChange(avgLine[-11], avgLine[-5])
+    cp7 = percentChange(avgLine[-11], avgLine[-4])
+    cp8 = percentChange(avgLine[-11], avgLine[-3])
+    cp9 = percentChange(avgLine[-11], avgLine[-2])
+    cp10 = percentChange(avgLine[-11], avgLine[-1])
+
+
+    patForRec.append(cp1)
+    patForRec.append(cp2)
+    patForRec.append(cp3)
+    patForRec.append(cp4)
+    patForRec.append(cp5)
+    patForRec.append(cp6)
+    patForRec.append(cp7)
+    patForRec.append(cp8)
+    patForRec.append(cp9)
+    patForRec.append(cp10)
+
+    print(patForRec)
+
+patternRecognition()
